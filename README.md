@@ -4,7 +4,7 @@
 >
 > 源自阅读[How to do distributed locking](http://martin.kleppmann.com/2016/02/08/how-to-do-distributed-locking.html)
 >
-> 提到在本书8，9章有着更进一步的论述于是找来本书，发现市面上没有概述的中文译本，记录
+> 提到在本书8，9章有着更进一步的论述于是找来本书记录
 
 ## 目录
 

@@ -57,10 +57,10 @@
    SELECT tweets.*, users.* FROM tweets   JOIN users   ON tweets.sender_id    = users.id   JOIN follows ON follows.followee_id = users.id   WHERE follows.follower_id = current_user
    ```
 
-   ![image-20200817132238941](/Users/david/md/DesigningDataIntensiveApplications/part1.FoundationasOfDataSystems/media/tweet1.png)
+   ![image-20200817132238941](./media/tweet1.png)
 
 2. 为每个用户的关注列表建立一个缓存--就像每个收信用户的邮箱。当一个用户推送了一条tweet，查询所有关注此用户的用户，在每个用户对应的缓存里插入一条tweet。请求读的处理才能快速，因为结果是提前计算的
-   ![image-20200817132338775](/Users/david/md/DesigningDataIntensiveApplications/part1.FoundationasOfDataSystems/media/tweet2.png)
+   ![image-20200817132338775](./media/tweet2.png)
 
 第一个版本的Twitter使用方案1，但是系统难以跟上查询关注用户的负载增长，所以公司改进为方案2。这种方案的效果良好，因为推送的请求数量级比查询的数量级低两个，因此最好在写入时做更多的工作，读取时才能简单
 
@@ -89,7 +89,7 @@ Twitter例子的最后总结：现在方案2已经被非常好的实现了，Twi
 
 在下图中，每个灰色直方图表示一个请求，高度表示响应时间长短。大多数请求在合理时间内得到响应，但是偶尔会有异常情况导致的长时间开销。慢速处理的请求本质上可能开销确实更大，比如处理更多的数据。但是即使在同一个场景下的同一种请求也会出乎意料的存在不同的响应时间：随机延迟的引入可能是由后台进程的上下文切换，网络丢包，TCP重连，GC，缺页中断，服务器基架的震动等许多问题造成的。
 
-![image-20200817170607899](/Users/david/md/DesigningDataIntensiveApplications/part1.FoundationasOfDataSystems/media/1-4.png)
+![image-20200817170607899](./media/1-4.png)
 
 ## 可维护性
 

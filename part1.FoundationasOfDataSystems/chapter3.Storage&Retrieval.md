@@ -10,9 +10,169 @@
 
 然后，本章让我们首先来讨论你很熟悉的存储引擎：传统关系型数据库，以及 NoSQL 数据库。我们将要讨论两种存储引擎家族：log-structured 存储引擎， page-oriented 存储引擎比如 B-tree
 
-## 数据结构使能你的数据库
+## 数据结构使能你的数据库 (Data Structures That Power Your Database)
 
-## 事务处理或者分析？
+考虑最简单的数据库，使用两个 Bash 函数实现 :
+
+```shell
+#!/bin/bash
+
+db_set() {
+	echo "$1,$2" >> database 
+}
+
+db_get() {
+	grep "^$1," database | sed -e "s/^$1,//" | tail -n 1
+}
+```
+
+这两个函数实现了一个 key-value 存储。你可以调用 `db_set key value`，就可以将 key 和 value 存储到数据库。key 和 value 可以是任何类型--比如，value 可以是 json 文档。然后你可以调用 `db_get key`，可以检索到对应 key 的最新的 value 返回。
+
+比如下面的流程
+
+```shell
+$ db_set 123456 '{"name":"London","attractions":["Big Ben","London Eye"]}'
+$ db_set 42 '{"name":"San Francisco","attractions":["Golden Gate Bridge"]}'
+$ db_get 42
+{"name":"San Francisco","attractions":["Golden Gate Bridge"]}
+```
+
+底层的存储格式非常简单：文本文件一行包含一个 key-value 对，通过逗号分隔（类似 csv 文件）。每次`db_set`的调用都会追加在文件末尾，即使你更新 key 的 value，老版本的 value 也不会被覆盖--你需要查看文件中 key 对应的最新的 value
+
+```shell
+$ db_set 42 '{"name":"San Francisco","attractions":["Exploratorium"]}'
+$ db_get 42
+{"name":"San Francisco","attractions":["Exploratorium"]}
+$ cat database
+123456,{"name":"London","attractions":["Big Ben","London Eye"]} 
+42,{"name":"San Francisco","attractions":["Golden Gate Bridge"]} 
+42,{"name":"San Francisco","attractions":["Exploratorium"]}
+```
+
+我们的`db_set`函数如此简单而且高性能，因为在文件末尾追加效率很高。类似`db_set`做的事情一样，很多数据库内部使用 *log*，就是一个只追加的数据文件。生产环境的数据库更多的还要处理比如并发控制，回收硬盘空间，log 不能一直增长，错误处理，部分写入记录等问题，但是基本原理是相同的。Log 是非常有用的，我们将在本书的其余部分经常提到
+
+> *log *通常表示应用的日志，描述应用行为的文本记录。在本书中，log 更多的表示这样的场景：一个只追加的 record 序列。不一定有对人类友好的可读性，可能是二进制或者只会被其他程序读取
+
+另一方面，我们的`db_set`函数性能又很差，如果你在数据库中有巨量的数据的话。每次你检索一个 key，`db_get`要扫描整个数据库文件，找到 key 出现的位置。在算法角度，这个检索的复杂度是 O(n)：如果你的数据量成倍增长，检索时间也会成倍增长。
+
+为了更有效率的检索特定的 key，我们需要另一个数据结构：*index（索引）*。在本章中，我们将会探讨一系列的索引结构，然后对比它们。它们**背后共同的思想就是维持一些额外的 metadata，来像路标一样帮助你定位你要检索的数据**。如果你想要通过不同的方法检索相同的数据，你可能需要为这份数据建立不同的索引
+
+索引就是建立于你的数据的额外结构。很多数据库允许你建立和移除索引，同时不会影响到数据库的数据，只会影响检索的效率。建立额外的数据结构意味着增加开销，尤其是写入开销。对于写入来说，很难超越直接追加文件的性能，因为是最简单的写入操作。任何类型的索引通常会减慢写入，因为每次写入数据都要更新索引
+
+这在存储系统中时一个重要的权衡：良好的索引可以加速查询，但是每个索引都会降低写入性能。因此，数据库默认不建立索引，而是要求你--应用开发者或者数据库管理员选择如何建立索引，来适用于你的应用的特定查询。你就可以为自己的应用选择最适合的索引建立，又不会引入过多的写入开销。
+
+### Hash Indexes
+
+让我们首先讨论 key-value 数据的索引。这不是仅有的可以索引的数据类型，但是很常见，而且对于更复杂索引的子块。
+
+key-value 存储非常类似于你可以在大多数编程语言中看到的字典类型，其通常使用 hash map（hash table）实现。hash map 很多算法书中都有描述，所以这里不展开。所以我们已经在内存有了 hash map，为什么还要在硬盘中建立数据的索引
+
+假设我们的数据文件如同上文所述，是只追加的文件。最简单的建立索引的策略是：在内存的 hash map 中维护 key-file offset 的数据。当你新追加数据到数据库中时，还要更新内存中的 hash map。检索数据时，先查内存的 hash map，然后按照得到的 offset 直接读文件即可
+
+如下图所示
+
+![image-20210325172644811](../pics/chapter3.Storage&Retrieval/image-20210325172644811.png)
+
+这听起来可能很简单，但是是一种可行的办法。实际上，这基本就是 Bitcask （Riak 的默认存储引擎）。Bitcask 提供了高性能读写，但是要求 key 尽可能小能在 RAM 存储，因为 hash map 全部保持在内存中。值可以用比内存更多的空间，因为可以从硬盘中加载。如果数据文件在文件系统的 cache 中，读操作都不需要硬盘 I/O
+
+Bitcask 存储引擎适合频繁更新的场景。比如，key 是一个猫片的 url，value 是播放次数。这个场景中，写入次数太多，而且没有很多 key，每个 key 都要大量写入，就很适合使用 Bitcask
+
+上文中，我们将所有数据追加到一个文件中，所以如何避免撑爆硬盘空间？一个好的解决方案是通过将达到一定大小的文件 close，然后新 open 一个文件继续操作。然后我们可以在关闭的文件上执行 *compaction* 操作，如下图所示。Compaction 意味着丢弃 log 中的重复 key，只保持最新的 value 行
+
+![image-20210325173501283](../pics/chapter3.Storage&Retrieval/image-20210325173501283.png)
+
+此外，compaction 通常会是段文件变小（假设一个 key 会在一个段文件中重复几次），因此我们还可以合并几个段文件，如下图所示。段文件在写入到硬盘后不会发生变更，所以合并后的段文件要写到新的文件中。merge 和 compaction 的操作可以在后台线程中完成。前台线程可以使用老的段文件正常服务。在 merge 过程完成后，将读请求切换到合并后的段文件中即可，老的文件可以被删除
+
+![image-20210325173837859](../pics/chapter3.Storage&Retrieval/image-20210325173837859.png)
+
+<center>图 3-3</center>
+
+每个段文件有自己的内存 hash map，其中存储了 file offset，为了检索到 key 的 value，首先要查看最新的段 hash map，如果 key 不存在，查第二新的段，如此等等。合并过程可以保持段数量较小，所以这个过程不会遍历很多 hash map
+
+想把这个简单的想法实现需要考虑很多细节。这里简单罗列了一些实现时的重要问题：
+
+- File format 
+  CSV 不是 log 的最好格式。将其编码为二进制格式更快更简单
+- Deleting records
+  如果你想删除一个 key-value 对，只需要追加一个特殊的删除记录到数据文件中（有时被称为 tombstone）。当 log segments 被合并时，tombstone 告诉合并线程这是被删除的 key-value
+- Crash recovery
+  数据库进程重启，内存中的 hash map 就会丢失。原则上，你可以从所有 segment file 中恢复出 hash map，但是如果数据文件巨大这会消耗太长时间以至于数据库不可用。Bitcask 通过存储 hash map 的快照到硬盘来加速恢复过程，可以直接加载到内存中
+- Partially written records
+  数据库可能任何时刻 crash，包括在 log 中追加写中途。Bitcask 文件包括 cheksums，可以检测出未完成记录
+- Concurrency control 
+  因为要写入以严格顺序追加到 log，最常见的实现时只有一个写入线程。数据文件段要不是可追加状态，要不是不可变状态，所以可以被多个线程读
+
+猛地一看，只追加的 log 很浪费：为什么不能原地更新文件，使用新值覆盖老值？但是追加的设计是由于以下原因：
+
+- 追加和 segments 合并都是序列写操作，比随机写快很多，尤其是 HHD 硬盘上。在某种方面，在 SSD 上顺序写也是可取的，在稍后的 **Comparing BTrees and LSM-Trees** 中讨论这个问题
+- 并发和故障恢复更简单。比如，你不用担心在覆盖过程中的故障，不会存在一半老一半新的值
+- 合并过程避免了数据文件不断发散的问题
+
+但是，hash tables 索引有几点限制：
+
+- hash tables 必须在内存中，如果你有非常大的 key，GG。原则上，你可以将 hash map 建立在硬盘上，但是硬盘上操作 hash table 性能很差，因为其需要大量随机读写，当硬盘变满时会更慢，而且还需要避免 hash 碰撞
+- 范围检索效率不高。比如如果要 scan kitty00000 到 kitty99999 的 key，你需要 look up hash table 中的所有 key
+
+下一节我们来讨论一些没有这些限制的索引结构
+
+### SSTables and LSM-Trees
+
+在图 3-3 中，每个 log-structured 存储 segment 是序列 key-value 对。这些对顺序就是写入顺序，相同 key 的顺序很重要，后面的 value 更新，键值对之间的顺序无关紧要。
+
+现在我们将这个结构改一下：要求 key-value 对的顺序是根据 key 排序的。乍一看，该要求似乎打破了顺序写入的能力，但是不会的。
+
+我们称这种格式为 *Sorted String Table *或者* SSTable*。我们还要求每个 key 在已经合并过的 segment 文件里只出现一次（这个在合并过程中保证了）。*SSTable *相比 hash 索引的 log segments 有几个巨大的优势：
+
+1. 合并 segment 简单效率，即使文件比可用内存还大。这个方法就像归并排序算法，下图是示意图：依次读取输入文件，对比每个文件的第一个 key，拷贝最小的 key 到输出文件，然后重复这个过程。输出的合并后的 segment file，也是按照 key 排序的
+   ![image-20210325210446129](../pics/chapter3.Storage&Retrieval/image-20210325210446129.png)
+   如果多个输入文件中存在相同 key 怎么办？请记住，每个 segment 包含了一段时间数据库的所有值，这意味着一个文件里的所有值一定新于老文件的所有值，所以如果有多个 segment 包含相同 key，选择最新的文件中的记录，老文件的都可以丢弃
+2. 为了检索文件中特定 key，你不需要在内存中维护所有 key 的索引。看下图：比如你在检索 key `handiwork`, 但是不知道这个 key 的 segment file offset。然而，你知道 handbag 和 handsome 的 offset，因为是排序的，所以 handiwork 一定在这两个 key 中间。这意味着你可以从 handbag 的 offset 开始搜索
+   ![image-20210325212359453](../pics/chapter3.Storage&Retrieval/image-20210325212359453.png)
+   你仍然需要内存索引来告诉你一些 key 的 offset，但是可以是稀疏的，一个 segment file 每隔几千字节一个 key 就足够了，因为少量的遍历也很快
+3. 由于读请求无论如何都需要在请求范围内扫描多个 key，因此可以将一组 record 作为 block，压缩写入磁盘（图 3-5 中的阴影部分）。然后稀疏的内存索引的每个 entry 都在压缩块的起始点。除了节省磁盘空间，压缩还可以降低磁盘 I/O 带宽的使用
+
+#### Constructing and maintaining SSTables
+
+但目前为止不错--但是如何在开始就将数据按 key 排好序？到来的写入可以是任何顺序。
+
+在磁盘上维护一个排序结构是可能的（参见下面"B-Trees"一节），不过在内存中维护更为容易。有很多树结构供你选择，比如红黑树或者 AVL 树。使用这些数据结构，你可以任意顺序插入 key，然后按序读取
+
+现在我们可以是存储引擎如下工作：
+
+- 写入到来，将其加入内存的平衡树结构（比如，红黑树）。这个内存中的树也被称为 *memtable*
+- 当 memtable 大小超过阈值，写入磁盘的 SSTable 文件。这个操作效率很高，因为树结构已经保证了按 key 排序。新的 SSTable 文件称为数据库最新的 segment。当 SSTable 被写入到磁盘，新的写入请求被加到新的 memtable 实例
+- 为了服务读请求，首先在 memtable 中查找 key，然后再最近的硬盘 segment，依次查找。
+- 从始至终，后台都会运行 merge 和 compaction 进程合并 segment 文件以及丢弃应该删除的 value
+
+这个方案非常好。只有一个问题了：如果数据库崩溃了，最近的写入（在 memtable 中但是没有写到磁盘）就丢了。为了解决这个问题，我们可以单独维护一个 log，每次写入马上写到磁盘上，就像最开始那样。这个 log 不是排序的，但是无所谓，因为只是为了数据库崩溃后恢复 memtable。每次 memtable 落盘到 SSTable，对应的 log 就可以被丢弃
+
+#### Making an LSM-tree out of SSTables
+
+这里描述的算法本质上是 LevelDB 和 RocksDB，key-value 存储引擎中使用的，作为库为嵌入到其他应用中。除此之外，LevelDB 可用于 RIAK 作为 Bitcask 的替代品。类似的存储引擎还用于 Cassandra 和 HBase，都是受 Google 的 Bigtable 论文启发（其中介绍了 SSTable 和 memtable）
+
+最开始这种索引结构是被 Patrik ONeil 在论文 *Log-Structtured Merge-Tree *中描述，建立了 log-structured 文件系统的早期工作。基于此论文中合并压缩有序文件的概念的存储引擎通常被称为 LSM 存储引擎
+
+Lucene，全文检索的索引引擎，被 Elasticsearch 和 Solr 使用，使用了类似的方法存储它的 term dictionary。全文索引比 key-value 索引更加复杂，但是基于相似的想法：给一个 word 查询，找到所有包含这个单词的文档。可以通过 key-value 结构实现，key 是 word（*term*），value 是包含这个 word 的文档 ID 列表。在 Lucene 中，从 term 到 文档 id 列表的映射保存在 SSTable-like 的有序文件中，也需要后台进程合并。
+
+#### Performance optimizations
+
+### B-Trees
+
+#### Making B-trees reliable
+
+#### B-tree optimizations
+
+### Comparing B-trees and LSM-Trees
+
+#### Advantages of LSM-trees
+
+#### Downsides of LSM-trees
+
+### Other Indexing Structures
+
+#### Storing values within the index
+
+## 事务处理或者分析？(Transaction processing or Analytics?)
 
 在业务数据处理的早期，对数据库的写入通常与发生的商业交易相对应：进行销售，向供应商下单，支付员工工资等。随着数据库的扩展，并不涉及货币交易的增加，事务一次却停滞不前，指的是一组交易的读取和写入
 

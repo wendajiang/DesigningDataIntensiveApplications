@@ -25,7 +25,7 @@ Chapter 1 [可靠、可扩展和可维护的应用](https://github.com/wendajian
 
 Chapter 2 数据模型和查询语言
 
-Chapter 3 存储和检索
+Chapter 3 [存储和检索](https://github.com/wendajiang/DesigningDataIntensiveApplications/blob/master/part1.FoundationasOfDataSystems/chapter3.Storage&Retrieval.md)
 
 Chapter 4 编码和进化
 

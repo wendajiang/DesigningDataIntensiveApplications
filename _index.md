@@ -1,8 +1,11 @@
 +++
-template = "page.html"
-date = "2021-02-02 18:39:18"
-title = "Welcome to wendajiang!"
+title = "ddia"
+template = "ddia_section.html"
+sort_by = "weight"
+paginate_by = 100
+weight = 997
 +++
+
 # 《Designing Data-Intensive Applications》翻译
 
 > 2020.08.05 开始更新
@@ -26,11 +29,11 @@ title = "Welcome to wendajiang!"
 > 3. 第三章 剖析数据库的引擎和在硬盘上的数据排列方式。从而发现不同的数据引擎对于不通的工作流做了各自的优化，针对不同的场景选择合适的数据引擎可以获得巨大的性能回报
 > 4. 第四章 比较几种格式的数据编码方案（序列化），尤其检验它们在应用要求发生变更和模式需要随着时间适应的环境中的表现
 
-Chapter 1 [可靠、可扩展和可维护的应用](https://github.com/wendajiang/DesigningDataIntensiveApplications/blob/master/part1.FoundationasOfDataSystems/chapter1.Reliabel_ScalabelAndMaintainableApplications.md)
+Chapter 1 [可靠、可扩展和可维护的应用](part1.FoundationasOfDataSystems/chapter1-reliabel-scalabelandmaintainableapplications)
 
 Chapter 2 数据模型和查询语言
 
-Chapter 3 [存储和检索](https://github.com/wendajiang/DesigningDataIntensiveApplications/blob/master/part1.FoundationasOfDataSystems/chapter3.Storage&Retrieval.md)
+Chapter 3 [存储和检索](part1.FoundationasOfDataSystems/chapter3-storage-retrieval)
 
 Chapter 4 编码和进化
 

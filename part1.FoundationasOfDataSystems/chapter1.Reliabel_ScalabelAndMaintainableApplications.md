@@ -1,3 +1,10 @@
++++
+template = "ddia_page.html"
+date = "2021-02-02 18:39:18"
+title = "Chapter1"
+weight = 1
++++
+
 # Chapter 1 Reliabel,Scalable,and Maintainable Applications
 
 > 互联网做的如此之优秀以至于人们习以为常的认为这是一种例如太平洋的自然资源而不是人造的。谁还记得上一次如此规模而且没有差错的技术是什么时候

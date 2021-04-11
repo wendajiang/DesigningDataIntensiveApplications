@@ -1,5 +1,9 @@
 +++
-template = "ddia_page.html"
+title = "part3"
+template = "ddia_section.html"
+sort_by = "weight"
+paginate_by = 100
+weight = 3
 +++
 
 在本书的第一部分和第二部分，我们从头开始组装进入分布式数据库的所有主要因素，从磁盘的数据布局一直到出现故障时分布式一致性的极限。但是，这些讨论假定应用中只有一个数据库

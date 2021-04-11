@@ -1,3 +1,10 @@
++++
+template = "ddia_page.html"
+date = "2021-02-02 18:39:18"
+title = "Chapter3"
+weight = 3
++++
+
 > 如果你保持事务的有序性，你就懒得去寻找 -- German proverb
 
 在最共有的常识层面上讲，数据库需要做两件事：存储你的数据，当你需要时将数据给你。

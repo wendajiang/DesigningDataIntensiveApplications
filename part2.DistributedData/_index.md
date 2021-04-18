@@ -48,7 +48,7 @@ weight = 1
 
 这是两种独立的机制，而且它们经常并存，如图II-1
 
-![image-20210419003851551](https://wendajiang.github.io/pics/ddia/_index/image-20210419003851551.png)
+![image-20210419003851551](https://wendajiang.github.io/pics/ddia/part2/image-20210419003851551.png)
 
 
 了解了这些概念之后，我们需要在分布式系统中进行艰难的权衡。在 [第 7 章](./chapter7-transactions) 中，我们讨论事务，这将帮助你理解数据系统中可能出错的地方以及如何处理。在 [第 8 章](./chapter8-distrubutedsystemstrouble) 和 [第 9 章](./chapter9-consistency-consensus) 中，我们讨论分布式系统重要的局限性。

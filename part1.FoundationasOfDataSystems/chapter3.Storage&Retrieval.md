@@ -325,7 +325,7 @@ https://github.com/facebook/rocksdb/wiki/Leveled-Compaction
 
 下图展示了可以在杂货店零售商找到的数据仓库。模式的中兴是被称为事实表（在这个例子中，是 fact_sales）。事实表的每一行表示在特定时间发生的事件（这个例子中，每行表示客户购买产品）。如果我们在分析网站流量而不是零售量，则每行可能代表用户的页面浏览量或者点击次数。
 
-![image-20200922110502630](./media/image-20200922110502630.png)
+![image-20200922110502630](https://wendajiang.github.io/pics/ddia/chapter1.Reliabel_ScalabelAndMaintainableApplications/image-20200922110502630.png)
 
 通常，将事实捕获为单个事件，因为这样可以在以后最大程度地灵活分析。但是，这意味着事实表可能会变得非常大。像 Apple，Walmart 或者 eBay 这样的大企业可能在数据仓库中拥有几十 PB 的交易历史记录，其中大多数实际上是表格。
 

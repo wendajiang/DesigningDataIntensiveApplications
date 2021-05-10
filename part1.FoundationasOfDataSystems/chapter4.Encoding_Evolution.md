@@ -114,7 +114,7 @@ Thrift 和 PB 都有各种语言的代码生成器。你的应用可以使用生
 
  为 59 字节如图 Figure 4-2 
 
-![image-20210510210104831](../../../static/pics/ddia/chapter4.Encoding_Evolution/image-20210510210104831.png)
+![image-20210510210104831](https://wendajiang.github.io/pics/ddia/chapter4.Encoding_Evolution/image-20210510210104831.png)
 
 每个 field 有一个类型注解（指出是字符串，整数，list 等），以及一个长度标识（数据的长度）。数据也被编码为 ACSII
 
@@ -122,11 +122,11 @@ Thrift 和 PB 都有各种语言的代码生成器。你的应用可以使用生
 
 Thrift CompactProtocol 语义上与 BinaryProtocol 是相等的，如图 Figure 4-3 ，将相同的信息更紧凑使得数据压缩到 34 字节。通过将 field type 和 tag number 打包到一个字节中，并使用变长整数来做到。比如数字 1337 不使用完整的 8 个字节，编码为两个字节，每个字节的顶部表示是否有更多字节。这意味着一个字节可以编码 -64 到 63 的数，-8192 到 8191 可以使用两个字节编码等，更大的数使用更多的字节。
 
-![image-20210510210549211](../../../static/pics/ddia/chapter4.Encoding_Evolution/image-20210510210549211.png)
+![image-20210510210549211](https://wendajiang.github.io/pics/ddia/chapter4.Encoding_Evolution/image-20210510210549211.png)
 
 最后，PB 只有一种二进制编码格式，如图 Figure 4-4。[关于PB的详情请点击这里](https://wendajiang.github.io/protoetc/)。使用不同的方式压缩数据，类似于 Thrift CompactProtocol，PB 将数据压缩到 33 字节
 
-![image-20210510211118340](../../../static/pics/ddia/chapter4.Encoding_Evolution/image-20210510211118340.png)
+![image-20210510211118340](https://wendajiang.github.io/pics/ddia/chapter4.Encoding_Evolution/image-20210510211118340.png)
 
 一个细节需要注意：在前面的 schema 中，每 field 被标注为 required 或者 optional，但是对于编码没有意义（就是编码中不会体现这个）。不同的 required 在运行时会检查，如果该 field 没有设置就会失败，容易发现 bug
 

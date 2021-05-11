@@ -22,4 +22,58 @@ weight = 2
 
 掌握一种数据模型就要花费大量精力（想想看有多少本介绍关系数据模型的书）。构建软件是困难的，即使只使用一种数据模型并且不考虑内部如何工作。同时数据模型的选择又对软件能做什么不能做什么有着巨大影响，应用关于数据模型的选择是如此重要
 
-在本章我们将要讨论一些列通用数据模型以及查询。尤其是，我们比较关系模型，文档模型以及少部分图模型。我们将讨论一些查询语言并对比它们的使用。在[第三章](./chapter3-storage-retrieval)，我们讨论存储引擎如何工作，详细说明了数据模型如何实现。
+在本章我们将要讨论一系列通用数据模型以及查询。尤其是，我们比较关系模型，文档模型以及少部分图模型。我们将讨论一些查询语言并对比它们的使用。在[第三章](./chapter3-storage-retrieval)，我们讨论存储引擎如何工作，详细说明了数据模型如何实现。
+
+## Relational Model Versus Document Model
+
+### The Birth of NoSQL
+
+### The Object-Relational Mismatch
+
+### Many-to-One and Many-to-Many Relationships
+
+### Are Document Databases Repeating History?
+
+### Relational Versus Document Databases Today
+
+## Query Languages for Data
+
+### Declarative Queries on the Web
+
+### MapReduce Querying
+
+## Graph-like Data Models
+
+### Property Graphs
+
+### The Cypher Query Language
+
+### Graph Queries in SQL
+
+### Triple-Stories and SPARQL
+
+### The Foundation: Datalog
+
+## Summary
+
+数据模型是个相当大的主题，本章中我们快速浏览了几种不同的数据模型。没有对每种数据模型进行详细展开，但是希望概述已经可以帮助你发现更多模型信息使之更好的适配你的应用要求。
+
+从历史上看，数据开始表示为一个大树（分层模型），但这对表示多对多关系不利，所以关系模型被发明来解决这个问题。最近，开发者发现一些应用不适合使用关系模型，新的非关系型 "NoSQL" 数据存储主要向两个方向发展：
+
+1. 文档数据库，目标场景是数据来自与自包含的文档，文档之间关系很弱
+2. 图数据库，与文档数据库相反，数据之间的联系更重要
+
+这三种模型（document, relational, graph）今天都被广泛应用，每种都有自己的杀手场景。一种模型可以模拟为另一种模型，比如，图数据可以存储在关系数据库中，但是结果通常比较丑陋。这就是我们需要不同系统的原因，没有统一的解决方案。
+
+文档和图数据库的共同点是不强制它们存储数据的 schema，使得应用适配更新更容易。但是，你的应用还是假设数据有一种结构；只是 schema 是显式还是隐式的问题。
+
+每种数据模型都有自己的查询语言和框架，我们讨论了集中例子：SQL，MapReduce，MongoDB 的聚集 pipeline，Cypher，SPARQL，和 Datalog。我们还涉及了 CSS 和 XSL/XPath，不是查询语言但是有相似之处。
+
+尽管我们涉及了很大的范围，但是还有很多数据模型我们没有讨论到。这里给一个简单例子：
+
+- 基因数据的研究者需要执行序列相似度查询，意思是有一个非常长的字符串（表示基因序列），然后从很大的字符串数据库中挑选出与之最相似的一个，但是不能相同。没有现存的数据库可以处理这种操作，所有研究者开发了这种数据库，比如 GenBank
+- 粒子物理学家数十年一直进行大数据规模的数据分析，像大型强子对撞机这样的项目需要处理数百 PB 级别的数据！这样的规模下，需要定制解决方案来防止硬件成本无限上涨
+- 全文检索也是一种常见的数据模型。信息检索是一个大型专业主题，我们不会在本书中详细介绍，但是我们会在[第三章](./chapter3-storage-retrieval)涉及到搜索索引
+
+我们不得不先暂停这个话题了。在下一章中，我们将要讨论在实现本章讨论数据模型时的权衡。
+

@@ -6,11 +6,11 @@ weight = 4
 
 +++
 
-应用不可避免会随着时间而变化。随着新产品发布，用户需求更好被理解，或者业务环境的变化，增加特性或者修改特性。在[第一章](./chapter1-reliabel-scalabelandmaintainableapplications)中我们介绍了演化的观点：我们应该在构建系统时考虑到系统方便修改。
+应用不可避免会随着时间而变化。随着新产品发布，用户需求更好被理解，或者业务环境的变化，增加特性或者修改特性。在[第一章](../chapter1-reliabel-scalabelandmaintainableapplications)中我们介绍了演化的观点：我们应该在构建系统时考虑到系统方便修改。
 
 在大多数场景中，对应用的功能变更也意味着存储的变化：可能需要新的字段或者记录类型，或者需要以新的方式表现数据。
 
-在[第二章](./chapter2-datamodel-querylanguages)中我们讨论了不同数据模型应对这种变化的方式。关系型数据库假设数据库中的所有数据符合一个 schema：即使 schema 也会改变（比如通过 ALTER 命令），在特定时间存在一个固定的 schema。相反，schema-on-read 数据库不会强制 schema，所以这种数据库中包含了新老格式数据的混合。
+在[第二章](../chapter2-datamodel-querylanguages)中我们讨论了不同数据模型应对这种变化的方式。关系型数据库假设数据库中的所有数据符合一个 schema：即使 schema 也会改变（比如通过 ALTER 命令），在特定时间存在一个固定的 schema。相反，schema-on-read 数据库不会强制 schema，所以这种数据库中包含了新老格式数据的混合。
 
 当数据格式或者 schema 改变，对应应用程序的代码需要修改（比如，增加一个字段，应用程序代码也要修改）。但是，在大型应用中，代码修改不会马上生效：
 

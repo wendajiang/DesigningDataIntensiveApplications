@@ -269,6 +269,8 @@ http://smalldatum.blogspot.com/2015/11/read-write-space-amplification-b-tree.htm
 
 https://github.com/facebook/rocksdb/wiki/Leveled-Compaction
 
+https://zouzls.github.io/2016/11/23/LevelDB%E4%B9%8BLSM-Tree/
+
 ## 事务处理或者分析？(Transaction processing or Analytics?)
 
 在业务数据处理的早期，对数据库的写入通常与发生的商业交易相对应：进行销售，向供应商下单，支付员工工资等。随着数据库的扩展，并不涉及货币交易的增加，事务一次却停滞不前，指的是一组交易的读取和写入

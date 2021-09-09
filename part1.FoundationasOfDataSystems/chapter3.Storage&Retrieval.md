@@ -177,7 +177,7 @@ Lucene，全文检索的索引引擎，被 Elasticsearch 和 Solr 使用，使�
 
 像 SSTables，B-trees 也按照 key 序排序 key-value，可以支持高效查询和范围检索。但是其余有很大不同，设计思路是迥异的。
 
-我们之前讨论的 log-structure 索引将数据库切割为可变大小的 segment，通常是 MB 或者再大点，而且总是顺序写入。相反，B-tree 将数据库切割为固定大小的 block 或者 page，典型是 4KB（有时会打大点），一次读写一 page。这种设计更加贴近底层硬件，硬盘也被划分为固定大小的 blocks
+我们之前讨论的 log-structure 索引将数据库切割为可变大小的 segment，通常是 MB 或者再大点，而且总是顺序写入。相反，B-tree 将数据库切割为固定大小的 block 或者 page，典型是 4KB（有时会大点），一次读写一 page。这种设计更加贴近底层硬件，硬盘也被划分为固定大小的 blocks
 
 每 page 使用 address 表示，这可以允许一个 page 引用另一个 page，类似指针，但是在硬盘而不是内存中。我们可以使用这些 page reference 构造 page 的树，如图 3-6：
 
@@ -187,7 +187,7 @@ Lucene，全文检索的索引引擎，被 Elasticsearch 和 Solr 使用，使�
 
 在图 3-6 中，我们查找 key 251，我们知道要在 key 200 和 300 之间找。所以我们去到孩子 page，然后知道要在 250 和 270 之间，直到到了叶子节点，叶子节点的 page 中没有 refernces，而是保存了 value。
 
-一个 page 中孩子 page 的 reference 数量叫做* branching factor*。比如，在图 3-6 中，*branching factor *是 6。实际上，branching factor 取决于存储 page 的空间和范围边界，不过通常是几百。
+一个 page 中孩子 page 的 reference 数量叫做 *branching factor*。比如，在图 3-6 中，*branching factor* 是 6。实际上，branching factor 取决于存储 page 的空间和范围边界，不过通常是几百。
 
 如果你要在 B-tree 中更新一个已经存在的 key，你查找到包含这个 key 的叶子 page，然后在 page 中修改，写回 page 到硬盘中。如果想要新增一个 key，你需要找到包含在这个范围的 page，然后写进去。如果没有足够的空间容纳一个新的 key，会被分隔成两个半满的 page，然后再父 page 中更新 key 范围，如下图 3-7 所示：
 

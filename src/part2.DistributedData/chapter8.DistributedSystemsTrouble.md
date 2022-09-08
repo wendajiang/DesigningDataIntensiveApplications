@@ -9,7 +9,6 @@
 
 ### Cloud Computing and Supercomputing
 
-
 ## 不可靠的时钟
 
 时钟和时间是重要的。应用通过多种方式依赖时钟：

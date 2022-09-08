@@ -1,0 +1,17 @@
+# Summary
+
+- [Part1. Foundations of Data Systems](./part1.FoundationasOfDataSystems/_index.md)
+  - [chapter 1. Reliable Scalabel and Maintainable Applications](./part1.FoundationasOfDataSystems/chapter1.Reliabel_ScalabelAndMaintainableApplications.md)
+  - [chapter 2. Data Model Query Languages](./part1.FoundationasOfDataSystems/chapter2.DataModel_QueryLanguages.md)
+  - [chapter 3. Storage & Retrieval](./part1.FoundationasOfDataSystems/chapter3.Storage_Retrieval.md)
+  - [chapter 4. Encoding Evolution](./part1.FoundationasOfDataSystems/chapter4.Encoding_Evolution.md)
+- [Part2. Distributed Data](./part2.DistributedData/_index.md)
+  - [chapter 5. Replication](./part2.DistributedData/chapter5.Replication.md)
+  - [chapter 6. Partitioning](./part2.DistributedData/chapter6.Partitioning.md)
+  - [chapter 7. Transactions](./part2.DistributedData/chapter7.Transactions.md)
+  - [chapter 8. Distributed Systems Trouble](./part2.DistributedData/chapter8.DistributedSystemsTrouble.md)
+  - [chapter 9. Consistency and Consensus](./part2.DistributedData/chapter9.Consistency_Consensus.md)
+- [Part 3. Derived Data](./part3.DerivedData/_index.md)
+  - [chapter 10. Batch Processing](./part3.DerivedData/chapter10.BatchProcessing.md)
+  - [chapter 11. Stream Processing](./part3.DerivedData/chapter11.StreamProcessing.md)
+  - [chapter 12. The Future of Data Systems](./part3.DerivedData/chapter12.TheFutureOfDataSystems.md)

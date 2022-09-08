@@ -11,39 +11,6 @@
 > PS. 本书已有中文版出版，并且开源版本有 __@Vonng__ 翻译完成的 [精翻版本](https://github.com/Vonng/ddia)
 > 本翻译[链接](https://wendajiang.github.io/ddia)
 
-## 目录
-
-### Part I 数据系统的基本论述
-
-
-
-Chapter 1 可靠、可扩展和可维护的应用
-
-Chapter 2 数据模型和查询语言
-
-Chapter 3 存储和检索
-
-Chapter 4 编码和进化
-
-### Part II 分布式数据
-
-Chapter 5 复制
-
-Chapter 6 分区
-
-Chapter 7 事务
-
-Chapter 8 分布式系统的麻烦
-
-Chapter 9 一致性和正确性
-
-### Patr III 派生数据
-
-Chapter 10 批处理
-
-Chapter 11 流处理
-
-Chpater 12 数据系统的未来
 
 ## 法律声明
 

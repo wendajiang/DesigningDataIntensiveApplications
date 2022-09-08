@@ -8,4 +8,6 @@ title = "Designing Data Intensive Applications"
 [output.html]
 mathjax-support = true
 no-section-label = true
+git-repository-url = "https://github.com/wendajiang/DesigningDataIntensiveApplications"
+git-repository-icon = "fa-github"
 

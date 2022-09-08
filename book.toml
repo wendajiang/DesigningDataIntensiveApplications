@@ -4,3 +4,8 @@ language = "en"
 multilingual = false
 src = "src"
 title = "Designing Data Intensive Applications"
+
+[output.html]
+mathjax-support = true
+no-section-label = true
+

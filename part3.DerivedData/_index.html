@@ -1,0 +1,193 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Part 3. Derived Data - Designing Data Intensive Applications</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../part1.FoundationasOfDataSystems/_index.html"><strong aria-hidden="true">1.</strong> Part1. Foundations of Data Systems</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../part1.FoundationasOfDataSystems/chapter1.Reliabel_ScalabelAndMaintainableApplications.html"><strong aria-hidden="true">1.1.</strong> chapter 1. Reliable Scalabel and Maintainable Applications</a></li><li class="chapter-item expanded "><a href="../part1.FoundationasOfDataSystems/chapter2.DataModel_QueryLanguages.html"><strong aria-hidden="true">1.2.</strong> chapter 2. Data Model Query Languages</a></li><li class="chapter-item expanded "><a href="../part1.FoundationasOfDataSystems/chapter3.Storage_Retrieval.html"><strong aria-hidden="true">1.3.</strong> chapter 3. Storage & Retrieval</a></li><li class="chapter-item expanded "><a href="../part1.FoundationasOfDataSystems/chapter4.Encoding_Evolution.html"><strong aria-hidden="true">1.4.</strong> chapter 4. Encoding Evolution</a></li></ol></li><li class="chapter-item expanded "><a href="../part2.DistributedData/_index.html"><strong aria-hidden="true">2.</strong> Part2. Distributed Data</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../part2.DistributedData/chapter5.Replication.html"><strong aria-hidden="true">2.1.</strong> chapter 5. Replication</a></li><li class="chapter-item expanded "><a href="../part2.DistributedData/chapter6.Partitioning.html"><strong aria-hidden="true">2.2.</strong> chapter 6. Partitioning</a></li><li class="chapter-item expanded "><a href="../part2.DistributedData/chapter7.Transactions.html"><strong aria-hidden="true">2.3.</strong> chapter 7. Transactions</a></li><li class="chapter-item expanded "><a href="../part2.DistributedData/chapter8.DistributedSystemsTrouble.html"><strong aria-hidden="true">2.4.</strong> chapter 8. Distributed Systems Trouble</a></li><li class="chapter-item expanded "><a href="../part2.DistributedData/chapter9.Consistency_Consensus.html"><strong aria-hidden="true">2.5.</strong> chapter 9. Consistency and Consensus</a></li></ol></li><li class="chapter-item expanded "><a href="../part3.DerivedData/_index.html" class="active"><strong aria-hidden="true">3.</strong> Part 3. Derived Data</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../part3.DerivedData/chapter10.BatchProcessing.html"><strong aria-hidden="true">3.1.</strong> chapter 10. Batch Processing</a></li><li class="chapter-item expanded "><a href="../part3.DerivedData/chapter11.StreamProcessing.html"><strong aria-hidden="true">3.2.</strong> chapter 11. Stream Processing</a></li><li class="chapter-item expanded "><a href="../part3.DerivedData/chapter12.TheFutureOfDataSystems.html"><strong aria-hidden="true">3.3.</strong> chapter 12. The Future of Data Systems</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Designing Data Intensive Applications</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <p>在本书的第一部分和第二部分，我们从头开始组装进入分布式数据库的所有主要因素，从磁盘的数据布局一直到出现故障时分布式一致性的极限。但是，这些讨论假定应用中只有一个数据库</p>
+<p>实际上，数据系统通常更加复杂。在大型应用中你经常需要通过不同的方式获取和处理数据，没有单一的数据库可以满足所有不同的需求。应用因此使用多种存储产品的组合，比如数据存储，索引，缓存，分析系统等，并且实现从一个存储移动到另一个存储的机制</p>
+<p>在本书的最后一部分，我们将围绕多个不同的数据系统（可能具有不同的数据模型，并针对不同的访问模式进行优化）集成到一个一致的应用程序体系结构中的问题。供应商常常忽略系统构建这一方面，他们声称产品可以满足您的所有需求。实际上，集成不同的系统是非平凡应用中最重要的事情之一。</p>
+<h2 id="记录系统和派生数据系统"><a class="header" href="#记录系统和派生数据系统">记录系统和派生数据系统</a></h2>
+<p>在一个高层次上，存储和处理数据的系统可以被分为两个大类：</p>
+<ul>
+<li>记录系统(OLTP, Online Transaction Processing)
+记录系统（也称为事实来源）保存数据的权威版本。当输入新数据时（例如，用户输入）首先写入记录系统。每个事实仅表示一次（通常已经标准化）。如果另一个系统与记录系统中的数据存在差异，以记录系统为准</li>
+<li>派生数据系统(OLAP, Online Analytical Processing)
+派生系统中的数据是从另一个系统获取一些现有数据并以某种方式对其进行转换或处理的结果。如果丢失了派生数据，还可以重建。典型的例子就是缓存：可以从缓存中提供数据，但是如果缓存中没有需要的数据，可以使用基础数据库中的数据。非规范化的值，索引和实例化视图也属于此类。在推荐系统中，预测性摘要数据通常来自使用日志。</li>
+</ul>
+<p>从技术上来讲，派生的数据是冗余的，是信息的复制。然而，会在查询时提供良好的性能。通常将其归一化。你可以从单一数据源派以不同角度生出不同的数据集</p>
+<p>不是所有的系统在体系结构上对记录和派生系统又严格的区分，但是区分它们是有帮助的，因为可以梳理你的系统中的数据流：将系统中哪些是输入，哪些是输出，以及之间的依赖关系展示清楚</p>
+<p>大多数数据库，存储引擎，和查询语言本身都不是记录或者派生系统。数据库仅仅是工具：如何使用取决于你。它们之间的区别不在于工具，而是你在应用中如何使用它们。</p>
+<p>通过清楚地知道哪些数据是从其他数据中得出的，可以使得本来令人困惑的系统体系结构更清晰。这一点将贯穿本部分</p>
+<h3 id="章节概览"><a class="header" href="#章节概览">章节概览</a></h3>
+<p>我们将在<a href="./chapter10-batchprocessing">第 10 章</a>讨论批处理数据流的系统，比如 MapReduce，并了解它们如何向我们提供了构建大型数据系统的工具和原理。在<a href="./chapter11-streamprocessing">第 11 章</a>，我们将采用这些思路来应用到数据流，这使得我们可以以较低的延迟来做到同样的事。<a href="./chapter12-thefutureofdatasystems">第 12 章</a>通过探讨如何使用这些工具来构建可靠，可扩展以及可维护的应用总结了本书。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../part2.DistributedData/chapter9.Consistency_Consensus.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="../part3.DerivedData/chapter10.BatchProcessing.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../part2.DistributedData/chapter9.Consistency_Consensus.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="../part3.DerivedData/chapter10.BatchProcessing.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>
